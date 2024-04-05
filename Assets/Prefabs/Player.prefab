@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4425088245108774268}
   - component: {fileID: 2105675757915524628}
   - component: {fileID: -6129935132111830920}
+  - component: {fileID: 7122090422366014545}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -142,14 +143,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876455995d25fd2479bb4d60a464197d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpeed: 10
   PlayerPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   PlayerColor:
     m_InternalValue: {r: 0, g: 0, b: 0, a: 0}
-  colors:
-  - {r: 1, g: 0, b: 0, a: 0.00000016614067}
-  - {r: 0.08025551, g: 0, b: 1, a: 1.3519501e+22}
-  - {r: 0, g: 1, b: 0.10700154, a: 1.3519501e+22}
-  - {r: 1, g: 0, b: 0.79884434, a: 1.3519501e+22}
-  - {r: 1, g: 1, b: 1, a: 1.3519501e+22}
-  - {r: 0, g: 0, b: 0, a: 1.3519501e+22}
+--- !u!114 &7122090422366014545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6251915008867609264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0

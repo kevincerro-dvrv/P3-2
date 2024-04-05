@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerManager : NetworkBehaviour
 {
+    public float playerSpeed = 50f;
+
     // Network variables
     public NetworkVariable<Vector3> PlayerPosition = new NetworkVariable<Vector3>();
     public NetworkVariable<Color> PlayerColor = new NetworkVariable<Color>();
@@ -22,17 +24,35 @@ public class PlayerManager : NetworkBehaviour
 
     void Awake()
     {
+        //QualitySettings.vSyncCount = 1;
+	    //Application.targetFrameRate = 60;
+
         gameManager = GameManager.instance;
     }
 
     void Start() {
         meshRenderer = GetComponent<MeshRenderer>();
+        UpdatePlayerPosition(PlayerPosition.Value, PlayerPosition.Value);
+        PlayerPosition.OnValueChanged += UpdatePlayerPosition;
+        UpdatePlayerColor(PlayerColor.Value, PlayerColor.Value);
+        PlayerColor.OnValueChanged += UpdatePlayerColor;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = PlayerPosition.Value;
-        meshRenderer.material.SetColor("_Color", PlayerColor.Value);
+        if (IsOwner) {
+            RequestMovePlayer();
+        }
+    }
+
+    private void UpdatePlayerPosition(Vector3 previousValue, Vector3 newValue)
+    {
+        transform.position = newValue;
+    }
+
+    private void UpdatePlayerColor(Color previousValue, Color newValue)
+    {
+        meshRenderer.material.SetColor("_Color", newValue);
     }
 
     [Rpc(SendTo.Server)]
@@ -75,5 +95,17 @@ public class PlayerManager : NetworkBehaviour
         gameManager.AddColorToUsed(selectedColor);
         
         return selectedColor;
+    }
+
+    void RequestMovePlayer()
+    {
+        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        RequestMovePlayerRpc(movement);
+    }
+
+    [Rpc(SendTo.Server)]
+    void RequestMovePlayerRpc(Vector3 movement)
+    {
+        transform.position += movement * playerSpeed * Time.fixedDeltaTime;
     }
 }
