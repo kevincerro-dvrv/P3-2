@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 public class PlayerManager : NetworkBehaviour
 {
-    public float playerSpeed = 50f;
+    public float playerSpeed;
+    public float jumpSpeed;
 
     // Network variables
     public NetworkVariable<Vector3> PlayerPosition = new NetworkVariable<Vector3>();
@@ -12,6 +14,7 @@ public class PlayerManager : NetworkBehaviour
 
     // Class components
     private MeshRenderer meshRenderer;
+    private Rigidbody rb;
     private GameManager gameManager;
 
     public override void OnNetworkSpawn()
@@ -33,18 +36,33 @@ public class PlayerManager : NetworkBehaviour
 
     void Start() {
         meshRenderer = GetComponent<MeshRenderer>();
+        rb = GetComponent<Rigidbody>();
 
+        // Set player position
         UpdatePlayerPosition(PlayerPosition.Value, PlayerPosition.Value);
         PlayerPosition.OnValueChanged += UpdatePlayerPosition;
         UpdatePlayerColor(PlayerColor.Value, PlayerColor.Value);
         PlayerColor.OnValueChanged += UpdatePlayerColor;
     }
 
+    void Update()
+    {
+        if (!IsOwner) {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            RequestJumpPlayer();
+        }
+    }
+
     void FixedUpdate()
     {
-        if (IsOwner) {
-            RequestMovePlayer();
+        if (!IsOwner) {
+            return;
         }
+
+        RequestMovePlayer();
     }
 
     private void UpdatePlayerPosition(Vector3 previousValue, Vector3 newValue)
@@ -104,6 +122,23 @@ public class PlayerManager : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void RequestMovePlayerRpc(Vector3 movement)
     {
+        if (Vector3.zero == movement) {
+            return;
+        }
+
+        Debug.Log(movement);
+
         transform.position += movement * playerSpeed * Time.fixedDeltaTime;
+    }
+
+    void RequestJumpPlayer()
+    {
+        RequestJumpPlayerRpc();
+    }
+
+    [Rpc(SendTo.Server)]
+    void RequestJumpPlayerRpc()
+    {
+        rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
     }
 }
