@@ -1,3 +1,4 @@
+using ParrelSync;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,6 +16,11 @@ public class ServerManager : MonoBehaviour
         {
             networkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
             networkManager.ConnectionApprovalCallback = ApprovalCheck;
+        }
+
+        // Autostart as client if its clone
+        if (ClonesManager.IsClone()) {
+            NetworkManager.Singleton.StartClient();
         }
     }
 
