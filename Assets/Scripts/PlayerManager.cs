@@ -28,10 +28,12 @@ public class PlayerManager : NetworkBehaviour
 	    //Application.targetFrameRate = 60;
 
         gameManager = GameManager.instance;
+
     }
 
     void Start() {
         meshRenderer = GetComponent<MeshRenderer>();
+
         UpdatePlayerPosition(PlayerPosition.Value, PlayerPosition.Value);
         PlayerPosition.OnValueChanged += UpdatePlayerPosition;
         UpdatePlayerColor(PlayerColor.Value, PlayerColor.Value);
@@ -59,10 +61,6 @@ public class PlayerManager : NetworkBehaviour
     void RequestSpawnPlayerRpc(RpcParams rpcParams = default)
     {
         PlayerPosition.Value = new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
-        ChangeColorRpc();
-    }
-
-    public void ChangeColor() {
         ChangeColorRpc();
     }
 
