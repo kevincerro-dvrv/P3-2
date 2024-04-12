@@ -119,7 +119,7 @@ public class PlayerManager : NetworkBehaviour
     void RequestMovePlayer()
     {
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //transform.position += movement * playerSpeed * Time.deltaTime;
+        transform.position += movement * playerSpeed * Time.deltaTime;
 
         // Avoid unneccessary network packets if player is not moving
         if (Vector3.zero == movement) {
