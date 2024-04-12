@@ -1,3 +1,4 @@
+using ParrelSync;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -16,6 +17,11 @@ public class ServerManager : MonoBehaviour
             networkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
             networkManager.ConnectionApprovalCallback = ApprovalCheck;
         }
+
+        // Autostart as client if its clone
+        if (ClonesManager.IsClone()) {
+            NetworkManager.Singleton.StartClient();
+        }
     }
 
     void OnGUI()
@@ -24,14 +30,10 @@ public class ServerManager : MonoBehaviour
         if (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
         {
             StartButtons();
-        }
-        else
-        {
+        } else {
             StatusLabels();
-
-            RequestColorChange();
         }
-
+    
         GUILayout.EndArea();
     }
 
@@ -39,35 +41,14 @@ public class ServerManager : MonoBehaviour
     {
         if (GUILayout.Button("Host")) NetworkManager.Singleton.StartHost();
         if (GUILayout.Button("Client")) NetworkManager.Singleton.StartClient();
-        if (GUILayout.Button("Server")) NetworkManager.Singleton.StartServer();
     }
 
     static void StatusLabels()
     {
-        var mode = NetworkManager.Singleton.IsHost ?
-            "Host" : NetworkManager.Singleton.IsServer ? "Server" : "Client";
+        var mode = NetworkManager.Singleton.IsHost ? "Host" : "Client";
 
-        GUILayout.Label("Transport: " +
-            NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
+        GUILayout.Label("Transport: " + NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
         GUILayout.Label("Mode: " + mode);
-    }
-
-    static void RequestColorChange()
-    {
-        if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Change color" : "Request Color Change"))
-        {
-            if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient )
-            {
-                foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds)
-                    NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<PlayerManager>().ChangeColor();
-            }
-            else
-            {
-                var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-                var player = playerObject.GetComponent<PlayerManager>();
-                player.ChangeColor();
-            }
-        }
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
@@ -86,9 +67,13 @@ public class ServerManager : MonoBehaviour
 
     private void OnClientDisconnectCallback(ulong obj)
     {
+        if (!NetworkManager.Singleton.IsServer) {
+            return;
+        }
+
         Debug.Log("Player disconnected");
 
-        if (!networkManager.IsServer && networkManager.DisconnectReason != string.Empty)
+        if (networkManager.DisconnectReason != string.Empty)
         {
             Debug.Log($"Reason: {networkManager.DisconnectReason}");
         }

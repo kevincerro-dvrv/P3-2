@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 3917229212016434791}
   - component: {fileID: 7635530237890818490}
   - component: {fileID: 4425088245108774268}
+  - component: {fileID: -8473202211702080987}
   - component: {fileID: 2105675757915524628}
   - component: {fileID: -6129935132111830920}
+  - component: {fileID: -8966839765440851245}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -109,6 +111,33 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &-8473202211702080987
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6251915008867609264}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!114 &2105675757915524628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,14 +171,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876455995d25fd2479bb4d60a464197d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpeed: 10
+  jumpSpeed: 5
   PlayerPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   PlayerColor:
     m_InternalValue: {r: 0, g: 0, b: 0, a: 0}
-  colors:
-  - {r: 1, g: 0, b: 0, a: 0.00000016614067}
-  - {r: 0.08025551, g: 0, b: 1, a: 1.3519501e+22}
-  - {r: 0, g: 1, b: 0.10700154, a: 1.3519501e+22}
-  - {r: 1, g: 0, b: 0.79884434, a: 1.3519501e+22}
-  - {r: 1, g: 1, b: 1, a: 1.3519501e+22}
-  - {r: 0, g: 0, b: 0, a: 1.3519501e+22}
+--- !u!114 &-8966839765440851245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6251915008867609264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.02
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
