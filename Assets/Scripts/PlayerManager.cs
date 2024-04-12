@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerManager : NetworkBehaviour
 {
+    private const float MAX_MOVEMENT = 4.5f;
+    private const float MIN_MOVEMENT = -4.5f;
+
     public float playerSpeed;
     public float jumpSpeed;
 
@@ -134,6 +137,9 @@ public class PlayerManager : NetworkBehaviour
         }
 
         transform.position += movement * playerSpeed * Time.fixedDeltaTime;
+
+        // Run server-side checks for movement
+        RunMovementChecks();
     }
 
     void RequestJumpPlayer()
@@ -160,5 +166,20 @@ public class PlayerManager : NetworkBehaviour
     // TODO Use Raycast
     private bool IsGrounded() {
         return transform.position.y <= 1;
+    }
+
+    // Run server-side checks for movement
+    private void RunMovementChecks()
+    {
+        // Prevent move outside world
+        ClampMovementToGameRoom();
+    }
+
+    private void ClampMovementToGameRoom()
+    {
+        float clampedX = Mathf.Clamp(transform.position.x, MIN_MOVEMENT, MAX_MOVEMENT);
+        float clampedZ = Mathf.Clamp(transform.position.z, MIN_MOVEMENT, MAX_MOVEMENT);
+        
+        transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
     }
 }
