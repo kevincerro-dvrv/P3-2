@@ -10,6 +10,12 @@ public class GameManager : MonoBehaviour
     public List<Color> colors;
     private List<Color> usedColors = new();
 
+    // Authority options
+    public const string AUTHORITY_SERVER = "server";
+    public const string AUTHORITY_SERVER_REWIND = "server_rewind";
+    public const string AUTHORITY_CLIENT = "client";
+    private string authority = AUTHORITY_SERVER_REWIND;
+
     void Awake()
     {
         instance = this;
@@ -48,5 +54,31 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("[RemoveColorFromUsed] UsedColors count: " + usedColors.Count);
         Debug.Log("[RemoveColorFromUsed] AvailableColors count: " + colors.Except(usedColors).ToList().Count);
+    }
+
+    public void SetAuthority(string authority)
+    {
+        this.authority = authority;
+        Debug.Log("Authority set to " + authority);
+    }
+
+    public string GetAuthority()
+    {
+        return authority;
+    }
+
+    public bool IsServerAuthority()
+    {
+        return authority == AUTHORITY_SERVER;
+    }
+
+    public bool IsServerRewindAuthority()
+    {
+        return authority == AUTHORITY_SERVER_REWIND;
+    }
+
+    public bool IsClientAuthority()
+    {
+        return authority == AUTHORITY_CLIENT;
     }
 }

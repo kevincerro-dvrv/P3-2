@@ -31,6 +31,10 @@ public class ServerManager : MonoBehaviour
         {
             StartButtons();
         } else {
+            if (NetworkManager.Singleton.IsServer) {
+                AuthorityButtons();
+            }
+
             StatusLabels();
         }
     
@@ -49,6 +53,14 @@ public class ServerManager : MonoBehaviour
 
         GUILayout.Label("Transport: " + NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
         GUILayout.Label("Mode: " + mode);
+        GUILayout.Label("Authority: " + GameManager.instance.GetAuthority());
+    }
+
+    static void AuthorityButtons()
+    {
+        if (!GameManager.instance.IsServerAuthority() && GUILayout.Button("Change authority to Server")) GameManager.instance.SetAuthority(GameManager.AUTHORITY_SERVER);
+        if (!GameManager.instance.IsServerRewindAuthority() && GUILayout.Button("Change autority to Server + Rewind")) GameManager.instance.SetAuthority(GameManager.AUTHORITY_SERVER_REWIND);
+        if (!GameManager.instance.IsClientAuthority() && GUILayout.Button("Change autority to Client")) GameManager.instance.SetAuthority(GameManager.AUTHORITY_CLIENT);
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
