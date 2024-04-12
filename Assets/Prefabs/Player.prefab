@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -8473202211702080987}
   - component: {fileID: 2105675757915524628}
   - component: {fileID: -6129935132111830920}
-  - component: {fileID: 7122090422366014545}
+  - component: {fileID: -8966839765440851245}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -177,7 +177,7 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   PlayerColor:
     m_InternalValue: {r: 0, g: 0, b: 0, a: 0}
---- !u!114 &7122090422366014545
+--- !u!114 &-8966839765440851245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
-  PositionThreshold: 0.001
+  PositionThreshold: 0.02
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
   UseQuaternionSynchronization: 0

@@ -45,6 +45,15 @@ public class PlayerManager : NetworkBehaviour
         PlayerColor.OnValueChanged += UpdatePlayerColor;
     }
 
+    void FixedUpdate()
+    {
+        if (!IsOwner) {
+            return;
+        }
+
+        RequestMovePlayer();
+    }
+
     void Update()
     {
         if (!IsOwner) {
@@ -54,15 +63,6 @@ public class PlayerManager : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             RequestJumpPlayer();
         }
-    }
-
-    void FixedUpdate()
-    {
-        if (!IsOwner) {
-            return;
-        }
-
-        RequestMovePlayer();
     }
 
     private void UpdatePlayerPosition(Vector3 previousValue, Vector3 newValue)
@@ -116,6 +116,13 @@ public class PlayerManager : NetworkBehaviour
     void RequestMovePlayer()
     {
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        //transform.position += movement * playerSpeed * Time.deltaTime;
+
+        // Avoid unneccessary network packets if player is not moving
+        if (Vector3.zero == movement) {
+            return;
+        }
+        
         RequestMovePlayerRpc(movement);
     }
 
@@ -126,19 +133,32 @@ public class PlayerManager : NetworkBehaviour
             return;
         }
 
-        Debug.Log(movement);
-
         transform.position += movement * playerSpeed * Time.fixedDeltaTime;
     }
 
     void RequestJumpPlayer()
     {
+        // Only jump if player is grounded
+        if (!IsGrounded()) {
+            return;
+        }
+
         RequestJumpPlayerRpc();
     }
 
     [Rpc(SendTo.Server)]
     void RequestJumpPlayerRpc()
     {
+        // Only jump if player is grounded
+        if (!IsGrounded()) {
+            return;
+        }
+
         rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+    }
+
+    // TODO Use Raycast
+    private bool IsGrounded() {
+        return transform.position.y <= 1;
     }
 }
