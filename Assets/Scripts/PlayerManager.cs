@@ -138,8 +138,8 @@ public class PlayerManager : NetworkBehaviour
 
         transform.position += movement * playerSpeed * Time.fixedDeltaTime;
 
-        // Prevent move outside world
-        transform.position = ClampMovementToGameRoom();
+        // Run server-side checks for movement
+        RunMovementChecks();
     }
 
     void RequestJumpPlayer()
@@ -168,11 +168,18 @@ public class PlayerManager : NetworkBehaviour
         return transform.position.y <= 1;
     }
 
-    private Vector3 ClampMovementToGameRoom() {
+    // Run server-side checks for movement
+    private void RunMovementChecks()
+    {
+        // Prevent move outside world
+        ClampMovementToGameRoom();
+    }
 
+    private void ClampMovementToGameRoom()
+    {
         float clampedX = Mathf.Clamp(transform.position.x, MIN_MOVEMENT, MAX_MOVEMENT);
         float clampedZ = Mathf.Clamp(transform.position.z, MIN_MOVEMENT, MAX_MOVEMENT);
         
-        return new Vector3(clampedX, transform.position.y, clampedZ);
+        transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
     }
 }
