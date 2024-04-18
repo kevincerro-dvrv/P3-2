@@ -31,7 +31,7 @@ public class ServerManager : MonoBehaviour
         {
             StartButtons();
         } else {
-            if (NetworkManager.Singleton.IsServer) {
+            if (NetworkManager.Singleton.IsServer && GameManager.instance.canChangeAuthority) {
                 AuthorityButtons();
             }
 

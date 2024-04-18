@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public const string AUTHORITY_CLIENT = "client";
     private string authority = AUTHORITY_SERVER_REWIND;
 
+    public bool canChangeAuthority = true;
+
     void Awake()
     {
         instance = this;
