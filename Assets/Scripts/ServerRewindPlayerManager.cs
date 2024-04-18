@@ -3,7 +3,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class PlayerManager : NetworkBehaviour
+public class ServerRewindPlayerManager : NetworkBehaviour
 {
     private const float MAX_MOVEMENT = 4.5f;
     private const float MIN_MOVEMENT = -4.5f;
@@ -171,10 +171,6 @@ public class PlayerManager : NetworkBehaviour
     // Run server-side checks for movement
     private void RunMovementChecks()
     {
-        if (GameManager.instance.IsClientAuthority()) {
-            return;
-        }
-        
         // Prevent move outside world
         ClampMovementToGameRoom();
     }
@@ -184,6 +180,6 @@ public class PlayerManager : NetworkBehaviour
         float clampedX = Mathf.Clamp(transform.position.x, MIN_MOVEMENT, MAX_MOVEMENT);
         float clampedZ = Mathf.Clamp(transform.position.z, MIN_MOVEMENT, MAX_MOVEMENT);
         
-        transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
+        PlayerPosition.Value = new Vector3(clampedX, transform.position.y, clampedZ);
     }
 }
