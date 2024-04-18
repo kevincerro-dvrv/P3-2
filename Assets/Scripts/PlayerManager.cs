@@ -171,6 +171,10 @@ public class PlayerManager : NetworkBehaviour
     // Run server-side checks for movement
     private void RunMovementChecks()
     {
+        if (GameManager.instance.IsClientAuthority()) {
+            return;
+        }
+        
         // Prevent move outside world
         ClampMovementToGameRoom();
     }
